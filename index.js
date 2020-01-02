@@ -14,14 +14,19 @@ bot.onText(/\/echo (.+)/, function (msg, match) {
     bot.sendMessage(fromId, resp);
 });
 
+
+
 const SerhId = "309124685";
 // Простая команда без параметров
 bot.on('message', function (msg) {
     var chatId = msg.chat.id; // Берем ID чата (не отправителя)
     console.log(chatId);
-    // Фотография может быть: путь к файлу, поток (stream) или параметр file_id
-    var photo = 'sticker.webp'; // в папке с ботом должен быть файл "cats.png"
-    bot.sendPhoto(chatId, photo);
+    console.log(msg);
+    var message = msg.text;
+    bot.sendSticker(chatId, "sticker.webp");
+    bot.onReplyToMessage();
+    var photo = 'sticker.webp'; 
+    //bot.sendPhoto(chatId, photo);
     if(chatId == SerhId){
         bot.sendPhoto(chatId, photo);
     }
