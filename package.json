@@ -1,0 +1,27 @@
+{
+  "name": "telegrambot",
+  "version": "1.0.0",
+  "description": "First bot for Pug's Party",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "start": "node index.js"
+    },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PashaTechnik/TelegramBot.git"
+  },
+  "engines": {
+    "node": "12.13.0"
+  },
+  "author": "PashaTechnik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PashaTechnik/TelegramBot/issues"
+  },
+  "homepage": "https://github.com/PashaTechnik/TelegramBot#readme",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.40.0",
+    "nodemon": "^2.0.2"
+  }
+}
