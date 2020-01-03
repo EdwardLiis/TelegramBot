@@ -23,11 +23,13 @@ bot.on('message', function (msg) {
     console.log(chatId);
     console.log(msg);
     var message = msg.text;
-    bot.sendSticker(chatId, "sticker.webp");
-    bot.onReplyToMessage();
+    bot.sendSticker(chatId, "sticker.webp", {reply_to_message_id:msg.message_id});
+
+    //bot.sendSticker(reply_to_message_id,"sticker.webp")
     var photo = 'sticker.webp'; 
     //bot.sendPhoto(chatId, photo);
     if(chatId == SerhId){
         bot.sendPhoto(chatId, photo);
     }
 });
+
