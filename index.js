@@ -10,6 +10,7 @@ var token = '907526211:AAHdR8GCDZ6rHXVCTAS-4rX04bOcf3oa4WU';
 
 let Words = 4;
 
+
 var bot = new TelegramBot(token, { polling: true });
 
 let dictionary = [];
