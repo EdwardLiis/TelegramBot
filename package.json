@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "start": "node index.js"
-    },
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PashaTechnik/TelegramBot.git"
@@ -21,7 +21,10 @@
   },
   "homepage": "https://github.com/PashaTechnik/TelegramBot#readme",
   "dependencies": {
+    "chalk": "^3.0.0",
+    "cheerio": "^1.0.0-rc.3",
     "node-telegram-bot-api": "^0.40.0",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "puppeteer": "^2.0.0"
   }
 }
