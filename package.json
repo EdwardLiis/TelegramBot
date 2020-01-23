@@ -23,8 +23,10 @@
   "dependencies": {
     "chalk": "^3.0.0",
     "cheerio": "^1.0.0-rc.3",
+    "get-json": "^1.0.1",
     "node-telegram-bot-api": "^0.40.0",
     "nodemon": "^2.0.2",
-    "puppeteer": "^2.0.0"
+    "puppeteer": "^2.0.0",
+    "xmlhttprequest": "^1.8.0"
   }
 }

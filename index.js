@@ -10,11 +10,50 @@ var dictionary = fs.readFileSync("dictionary.txt", "utf8");
 
 var arrayOfStrings = dictionary.split("\n");
 
+var url = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5"
+
+var getJSON = require('get-json')
+
+
 
 var numberOfWords = arrayOfStrings[arrayOfStrings.length-1][0] - 1 + 1;
 
 var bot = new TelegramBot(token, { polling: true });
 
+getJSON(url, function(error, currencyData){
+    
+    console.log(currencyData)
+    console.log(currencyData[0].ccy)
+    console.log(`1 Доллар США = ${currencyData[0].buy} Гривні`)
+})
+
+
+function getWord(string, word){
+
+    arr = string.split(" ");
+
+    for (i = 0; i < arr.length; i++) {
+        if (arr[i] == word){
+            return true
+        }
+    }
+}
+
+function probability(){
+    var rand = Math.floor(Math.random() * 100)
+    if(rand<35){
+        return true
+    }
+    else return false
+}
+
+
+function randText(arr,msg){
+
+    var rand =  Math.floor(Math.random() * (arr.length )); 
+
+    bot.sendMessage(msg.chat.id,arr[rand], {reply_to_message_id:msg.message_id})
+}   
 
 
 bot.onText(/\/echo (.+)/, function (msg, match) {
@@ -49,6 +88,36 @@ bot.onText(/\/ghoul/, function (msg) {
     console.log(msg);
     bot.sendAudio(chatId, "Tokyo Ghoul Opening.mp3");
 });
+
+bot.onText(/\/money/, function (msg) {
+    var chatId = msg.chat.id;
+    console.log(msg);
+    getJSON(url, function(error, currencyData){
+        console.log(currencyData)
+        bot.sendMessage(chatId, `1 Доллар США = ${currencyData[0].buy} Гривні 
+1 Евро = ${currencyData[1].buy} Гривні 
+1 Рубль = ${currencyData[2].buy} Гривні 
+1 Биткоин = ${currencyData[3].buy} Гривні`);
+    })
+});
+
+bot.on('message', function (msg) {
+    var message = msg.text;
+    var chatId = msg.chat.id; 
+    if(getWord(message, "доллар")||getWord(message, "Доллар")||getWord(message, "долларам")||getWord(message, "Долларам")||getWord(message, "доллара")||getWord(message, "Доллара")){
+        getJSON(url, function(error, currencyData){
+            console.log(currencyData)
+            bot.sendMessage(chatId, `1 Доллар США = ${currencyData[0].buy} Гривні`);
+        })
+    }
+    if(getWord(message, "Евро")||getWord(message, "евро")){
+        getJSON(url, function(error, currencyData){
+            console.log(currencyData)
+            bot.sendMessage(chatId, `1 Евро = ${currencyData[1].buy} Гривні`);
+        })
+    }
+});
+
 
 
 bot.onText(/\/dict/, function (msg) {
@@ -128,34 +197,6 @@ bot.on('message', function (msg) {
 });
 
 
-function getWord(string, word){
-
-    arr = string.split(" ");
-
-    for (i = 0; i < arr.length; i++) {
-        if (arr[i] == word){
-            return true
-        }
-    }
-}
-
-function probability(){
-    var rand = Math.floor(Math.random() * 100)
-    if(rand<35){
-        return true
-    }
-    else return false
-}
-
-
-function randText(arr,msg){
-
-    var rand =  Math.floor(Math.random() * (arr.length )); 
-
-    bot.sendMessage(msg.chat.id,arr[rand], {reply_to_message_id:msg.message_id})
-}   
-
-
 
 
 textOnChannel = ["Ахахахаха", "Лол", ")))", "Хах", "Хех","Ебать!","Я это еще вчера видел","мммммм"]
@@ -193,17 +234,8 @@ bot.on('message', function (msg) {
         bot.sendMessage(chatId, "Соси, Пёс", {reply_to_message_id:msg.message_id})
     }
 
-    if(message == "Соси Артем" 
-    || message == "Артем соси" 
-    || message == "соси артем" 
-    || message == "артем соси хуй" 
-    || message == "соси хуй артем"
-    || message == "Артем, соси" 
-    || message == "Артем, соси хуй" 
-    || message == "Сост хуй, артем" 
-    || message == "Артем соси хуй" 
-    || message == "Артем соси" 
-    ){
+    if(getWord(message, "артем")&&getWord(message, "соси"))
+    {
         randText(textOnSosi, msg);
     }
 
