@@ -1,6 +1,7 @@
 
 const fs = require("fs");
 const SerhId = "309124685";
+const chatId = -1001315892389;
 
 var TelegramBot = require('node-telegram-bot-api');
 
@@ -89,7 +90,7 @@ bot.onText(/\/ghoul/, function (msg) {
     bot.sendAudio(chatId, "Tokyo Ghoul Opening.mp3");
 });
 
-bot.onText(/\/money/, function (msg) {
+/*bot.onText(/\/money/, function (msg) {
     var chatId = msg.chat.id;
     console.log(msg);
     getJSON(url, function(error, currencyData){
@@ -99,6 +100,19 @@ bot.onText(/\/money/, function (msg) {
 1 Рубль = ${currencyData[2].buy} Гривні 
 1 Биткоин = ${currencyData[3].buy} Гривні`);
     })
+});*/
+
+function getCurrency () {
+	getJSON(url, function(error, currencyData){
+        bot.sendMessage(chatId, `1 Доллар США = ${currencyData[0].buy} Гривні 
+1 Евро = ${currencyData[1].buy} Гривні 
+1 Рубль = ${currencyData[2].buy} Гривні 
+1 Биткоин = ${currencyData[3].buy} Гривні`);
+    })
+}
+
+bot.onText(/\/money/, function (msg) {
+	getCurrency();
 });
 
 bot.on('message', function (msg) {
@@ -242,12 +256,28 @@ bot.on('message', function (msg) {
     if(message == "Иди нахуй" 
     || message == "иди нахуй" 
     || message == "иди нахуй артем" 
-    || message == "артем иди нахуй" 
+    || message == "артем иди нахуй"  
     || message == "Иди нахуй артем" 
     || message == "Артем иди нахуй" 
     ){
         randText(textOnNahui, msg);
     }
 });
+
+var checkSent = false;
+
+setInterval(function(){
+	var timeNow = new Date().getHours();
+    if (timeNow == '10') {
+		if (checkSent == false) {
+			bot.sendMessage(chatId, "Новый день, новый хуй\n");
+			getCurrency();
+			checkSent = true;
+		}
+    }
+	else {
+		checkSent = false;
+	}
+}, 60000);
 
 bot.on("polling_error", (err) => console.log(err));
