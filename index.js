@@ -1,8 +1,7 @@
-
 const fs = require("fs");
 const SerhId = "309124685";
-const chatId = -1001315892389;
 
+var chatId = -1001315892389
 var TelegramBot = require('node-telegram-bot-api');
 
 var token = '907526211:AAHdR8GCDZ6rHXVCTAS-4rX04bOcf3oa4WU';
@@ -111,6 +110,35 @@ function getCurrency () {
     })
 }
 
+function getWeather () {
+    const urlHark = "http://api.openweathermap.org/data/2.5/weather?q=Харьков&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru"
+    const urlKiev = "http://api.openweathermap.org/data/2.5/weather?q=Киев&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru"
+    const urlRzeszow = "http://api.openweathermap.org/data/2.5/weather?q=Rzeszow&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru"
+    getJSON(urlHark, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]
+        console.log(temp, description)
+        bot.sendMessage(chatId, `Сейчас в Харькове ${temp} градусов и ${description}`) 
+    })
+    getJSON(urlKiev, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]        
+        console.log(temp, description)
+        bot.sendMessage(chatId, `Сейчас в Киеве ${temp} градусов и ${description}`) 
+    })
+    getJSON(urlRzeszow, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]
+        console.log(temp, description)
+        bot.sendMessage(chatId, `Сейчас в Жешуве ${temp} градусов и ${description}`) 
+    })
+}
+
+
+
 bot.onText(/\/money/, function (msg) {
 	getCurrency();
 });
@@ -151,7 +179,6 @@ bot.onText(/\/dict/, function (msg) {
 
 /*bot.onText(/\/dict/, function (msg) {
     var chatId = msg.chat.id; 
-
     bot.sendMessage(chatId, "Выберите действие для словаря", {
         reply_markup: {
             inline_keyboard: [
@@ -181,7 +208,6 @@ bot.onText(/\/dict/, function (msg) {
 
 
 /*bot.on("callback_query", query => {
-
     var chatId = query.chat.id; 
     
     console.log(query)
@@ -209,6 +235,51 @@ bot.on('message', function (msg) {
      //   bot.sendSticker(chatId, "sticker.webp", {reply_to_message_id:msg.message_id});
     //}
 });
+bot.onText(/\/weather (.+)/, function (msg, match) {
+    var fromId = msg.from.id;
+    var resp = match[1]; 
+
+    var url = `http://api.openweathermap.org/data/2.5/weather?q=${resp}&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru`
+    
+    getJSON(url, function(error, weather){
+		try {
+			let {temp} = weather.main
+			let {description} = weather.weather[0]
+			bot.sendMessage(msg.chat.id, `Сейчас в ${resp} ${temp} градусов и ${description}`) 
+		} catch (error){
+			bot.sendMessage(chatId, 'Пидорас, иди учи географию, я не понимаю что ты высрал');
+		}
+    })
+});
+
+bot.onText(/\/day/, function (msg) {
+    var chatId = msg.chat.id;
+    const urlHark = "http://api.openweathermap.org/data/2.5/weather?q=Kharkiv&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru"
+    const urlKiev = "http://api.openweathermap.org/data/2.5/weather?q=Kiev&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru"
+    const urlRzeszow = "http://api.openweathermap.org/data/2.5/weather?q=Rzeszow&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru"
+    getJSON(urlHark, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]
+        console.log(temp, description)
+        bot.sendMessage(chatId, `Сейчас в Харькове ${temp} градусов и ${description}`) 
+    })
+    getJSON(urlKiev, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]        
+        console.log(temp, description)
+        bot.sendMessage(chatId, `Сейчас в Киеве ${temp} градусов и ${description}`) 
+    })
+    getJSON(urlRzeszow, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]
+        console.log(temp, description)
+        bot.sendMessage(chatId, `Сейчас в Жешуве ${temp} градусов и ${description}`) 
+    })
+});
+
 
 
 
@@ -271,7 +342,8 @@ setInterval(function(){
     if (timeNow == '10') {
 		if (checkSent == false) {
 			bot.sendMessage(chatId, "Новый день, новый хуй\n");
-			getCurrency();
+            getCurrency();
+            getWeather();
 			checkSent = true;
 		}
     }
@@ -281,3 +353,4 @@ setInterval(function(){
 }, 60000);
 
 bot.on("polling_error", (err) => console.log(err));
+
