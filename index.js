@@ -249,6 +249,10 @@ bot.onText(/\/weather (.+)/, function (msg, match) {
 		} catch (error){
 			bot.sendMessage(chatId, 'Пидорас, иди учи географию, я не понимаю что ты высрал');
 		}
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]
+        bot.sendMessage(msg.chat.id, `Сейчас в ${resp} ${temp} градусов и ${description}`) 
     })
 });
 
