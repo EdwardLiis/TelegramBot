@@ -1,7 +1,7 @@
-
 const fs = require("fs");
 const SerhId = "309124685";
 
+var chatId = -1001315892389
 var TelegramBot = require('node-telegram-bot-api');
 
 var token = '907526211:AAHdR8GCDZ6rHXVCTAS-4rX04bOcf3oa4WU';
@@ -89,7 +89,7 @@ bot.onText(/\/ghoul/, function (msg) {
     bot.sendAudio(chatId, "Tokyo Ghoul Opening.mp3");
 });
 
-bot.onText(/\/money/, function (msg) {
+/*bot.onText(/\/money/, function (msg) {
     var chatId = msg.chat.id;
     console.log(msg);
     getJSON(url, function(error, currencyData){
@@ -99,6 +99,48 @@ bot.onText(/\/money/, function (msg) {
 1 Рубль = ${currencyData[2].buy} Гривні 
 1 Биткоин = ${currencyData[3].buy} Гривні`);
     })
+});*/
+
+function getCurrency () {
+	getJSON(url, function(error, currencyData){
+        bot.sendMessage(chatId, `1 Доллар США = ${currencyData[0].buy} Гривні 
+1 Евро = ${currencyData[1].buy} Гривні 
+1 Рубль = ${currencyData[2].buy} Гривні 
+1 Биткоин = ${currencyData[3].buy} Гривні`);
+    })
+}
+
+function getWeather () {
+    const urlHark = "http://api.openweathermap.org/data/2.5/weather?q=Харьков&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru"
+    const urlKiev = "http://api.openweathermap.org/data/2.5/weather?q=Киев&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru"
+    const urlRzeszow = "http://api.openweathermap.org/data/2.5/weather?q=Rzeszow&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru"
+    getJSON(urlHark, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]
+        console.log(temp, description)
+        bot.sendMessage(chatId, `Сейчас в Харькове ${temp} градусов и ${description}`) 
+    })
+    getJSON(urlKiev, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]        
+        console.log(temp, description)
+        bot.sendMessage(chatId, `Сейчас в Киеве ${temp} градусов и ${description}`) 
+    })
+    getJSON(urlRzeszow, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]
+        console.log(temp, description)
+        bot.sendMessage(chatId, `Сейчас в Жешуве ${temp} градусов и ${description}`) 
+    })
+}
+
+
+
+bot.onText(/\/money/, function (msg) {
+	getCurrency();
 });
 
 bot.on('message', function (msg) {
@@ -137,7 +179,6 @@ bot.onText(/\/dict/, function (msg) {
 
 /*bot.onText(/\/dict/, function (msg) {
     var chatId = msg.chat.id; 
-
     bot.sendMessage(chatId, "Выберите действие для словаря", {
         reply_markup: {
             inline_keyboard: [
@@ -167,7 +208,6 @@ bot.onText(/\/dict/, function (msg) {
 
 
 /*bot.on("callback_query", query => {
-
     var chatId = query.chat.id; 
     
     console.log(query)
@@ -195,6 +235,48 @@ bot.on('message', function (msg) {
      //   bot.sendSticker(chatId, "sticker.webp", {reply_to_message_id:msg.message_id});
     //}
 });
+bot.onText(/\/weather (.+)/, function (msg, match) {
+    var fromId = msg.from.id;
+    var resp = match[1]; 
+
+    var url = `http://api.openweathermap.org/data/2.5/weather?q=${resp}&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru`
+    
+    getJSON(url, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]
+        bot.sendMessage(msg.chat.id, `Сейчас в ${resp} ${temp} градусов и ${description}`) 
+    })
+});
+
+bot.onText(/\/day/, function (msg) {
+    var chatId = msg.chat.id;
+    const urlHark = "http://api.openweathermap.org/data/2.5/weather?q=Kharkiv&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru"
+    const urlKiev = "http://api.openweathermap.org/data/2.5/weather?q=Kiev&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru"
+    const urlRzeszow = "http://api.openweathermap.org/data/2.5/weather?q=Rzeszow&appid=1f7f0d7b3906c31e1158ca98f1fea4c2&units=metric&lang=ru"
+    getJSON(urlHark, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]
+        console.log(temp, description)
+        bot.sendMessage(chatId, `Сейчас в Харькове ${temp} градусов и ${description}`) 
+    })
+    getJSON(urlKiev, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]        
+        console.log(temp, description)
+        bot.sendMessage(chatId, `Сейчас в Киеве ${temp} градусов и ${description}`) 
+    })
+    getJSON(urlRzeszow, function(error, weather){
+    
+        let {temp} = weather.main
+        let {description} = weather.weather[0]
+        console.log(temp, description)
+        bot.sendMessage(chatId, `Сейчас в Жешуве ${temp} градусов и ${description}`) 
+    })
+});
+
 
 
 
@@ -242,7 +324,7 @@ bot.on('message', function (msg) {
     if(message == "Иди нахуй" 
     || message == "иди нахуй" 
     || message == "иди нахуй артем" 
-    || message == "артем иди нахуй" 
+    || message == "артем иди нахуй"  
     || message == "Иди нахуй артем" 
     || message == "Артем иди нахуй" 
     ){
@@ -250,4 +332,22 @@ bot.on('message', function (msg) {
     }
 });
 
+var checkSent = false;
+
+setInterval(function(){
+	var timeNow = new Date().getHours();
+    if (timeNow == '10') {
+		if (checkSent == false) {
+			bot.sendMessage(chatId, "Новый день, новый хуй\n");
+            getCurrency();
+            getWeather();
+			checkSent = true;
+		}
+    }
+	else {
+		checkSent = false;
+	}
+}, 60000);
+
 bot.on("polling_error", (err) => console.log(err));
+
